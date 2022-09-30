@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RectorComposer\Application\FileProcessor;
 
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use RectorComposer\Composer\ComposerJsonFactory;
 use RectorComposer\Contract\Rector\ComposerRectorInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -13,8 +14,6 @@ use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
-use Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ComposerFileProcessor implements FileProcessorInterface
@@ -23,8 +22,6 @@ final class ComposerFileProcessor implements FileProcessorInterface
      * @param ComposerRectorInterface[] $composerRectors
      */
     public function __construct(
-        private readonly ComposerJsonFactory $composerJsonFactory,
-        private readonly ComposerJsonPrinter $composerJsonPrinter,
         private readonly FileDiffFactory $fileDiffFactory,
         private readonly array $composerRectors
     ) {
@@ -47,7 +44,7 @@ final class ComposerFileProcessor implements FileProcessorInterface
         // to avoid modification of file
         $smartFileInfo = new SmartFileInfo($file->getFilePath());
         $oldFileContents = $smartFileInfo->getContents();
-        $composerJson = $this->composerJsonFactory->createFromFileInfo($smartFileInfo);
+        $composerJson = ComposerJsonFactory::createFromContent($oldFileContents);
 
         $oldComposerJson = clone $composerJson;
         foreach ($this->composerRectors as $composerRector) {
@@ -59,7 +56,7 @@ final class ComposerFileProcessor implements FileProcessorInterface
             return $systemErrorsAndFileDiffs;
         }
 
-        $changedFileContent = $this->composerJsonPrinter->printToString($composerJson);
+        $changedFileContent = json_encode($composerJson->getJsonArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
         $file->changeFileContent($changedFileContent);
 
         $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldFileContents, $changedFileContent);
