@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
+use Rector\Config\RectorConfig;
 use RectorComposer\Rector\ChangePackageVersionComposerRector;
 use RectorComposer\Rector\ReplacePackageAndVersionComposerRector;
 use RectorComposer\ValueObject\PackageAndVersion;
 use RectorComposer\ValueObject\RectorComposerConfig;
 use RectorComposer\ValueObject\ReplacePackageAndVersion;
-use Rector\Config\RectorConfig;
 
-return static function (RectorConfig $rectorConfig): void
-{
+return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->import(RectorComposerConfig::FILE_PATH);
     $rectorConfig
         ->ruleWithConfiguration(

@@ -20,6 +20,9 @@ final class ComposerJsonFactory
         return self::createFromArray(json_decode($content, true));
     }
 
+    /**
+     * @param mixed[] $jsonArray
+     */
     public static function createFromArray(array $jsonArray): ComposerJson
     {
         $composerJson = new ComposerJson();
