@@ -7,7 +7,7 @@ namespace RectorComposer\Composer;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
 
-class ComposerJsonFactory
+final class ComposerJsonFactory
 {
     public static function createFromFilePath(string $filePath): ComposerJson
     {
