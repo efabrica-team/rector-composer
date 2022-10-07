@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace RectorComposer\Application\FileProcessor;
 
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
-use RectorComposer\Composer\ComposerJsonFactory;
-use RectorComposer\Contract\Rector\ComposerRectorInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
@@ -14,6 +12,8 @@ use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use RectorComposer\Composer\ComposerJsonFactory;
+use RectorComposer\Contract\Rector\ComposerRectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ComposerFileProcessor implements FileProcessorInterface
